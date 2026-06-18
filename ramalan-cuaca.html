@@ -1,0 +1,514 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Ramalan Cuaca — Live MET Malaysia Forecast</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink: #0E2B27;
+    --panel: #163F3A;
+    --panel-soft: #1C4B45;
+    --gold: #E3A23C;
+    --hibiscus: #D24B3D;
+    --mist: #BFE3D6;
+    --cream: #F4EFE1;
+    --muted: #7FA89C;
+    --radius: 18px;
+  }
+
+  * { box-sizing: border-box; }
+
+  html, body {
+    margin: 0;
+    background: var(--ink);
+    color: var(--cream);
+    font-family: 'Inter', sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  body {
+    background-image:
+      radial-gradient(circle at 12% 8%, rgba(227,162,60,0.10), transparent 45%),
+      radial-gradient(circle at 90% 0%, rgba(191,227,214,0.07), transparent 40%);
+  }
+
+  a { color: var(--gold); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+
+  :focus-visible {
+    outline: 2px solid var(--gold);
+    outline-offset: 3px;
+    border-radius: 6px;
+  }
+
+  .app {
+    max-width: 880px;
+    margin: 0 auto;
+    padding: 36px 20px 60px;
+  }
+
+  /* ---------- header ---------- */
+  .eyebrow {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin: 0 0 10px;
+  }
+
+  .title {
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 700;
+    font-size: clamp(32px, 5vw, 46px);
+    margin: 0 0 6px;
+    line-height: 1.05;
+  }
+
+  .subtitle {
+    color: var(--mist);
+    font-size: 15px;
+    margin: 0 0 28px;
+    max-width: 520px;
+  }
+
+  /* ---------- state picker ---------- */
+  .state-row {
+    display: flex;
+    gap: 8px;
+    overflow-x: auto;
+    padding-bottom: 14px;
+    margin-bottom: 18px;
+    scrollbar-width: thin;
+    scrollbar-color: var(--panel-soft) transparent;
+  }
+  .state-row::-webkit-scrollbar { height: 6px; }
+  .state-row::-webkit-scrollbar-thumb { background: var(--panel-soft); border-radius: 4px; }
+
+  .pill {
+    flex: 0 0 auto;
+    background: var(--panel);
+    color: var(--mist);
+    border: 1px solid transparent;
+    padding: 9px 16px;
+    border-radius: 999px;
+    font-size: 13.5px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background 0.15s ease, color 0.15s ease, transform 0.1s ease;
+    white-space: nowrap;
+  }
+  .pill:hover { background: var(--panel-soft); transform: translateY(-1px); }
+  .pill.active {
+    background: var(--gold);
+    color: var(--ink);
+    font-weight: 600;
+  }
+
+  /* ---------- hero ---------- */
+  .hero {
+    position: relative;
+    background: var(--panel);
+    border-radius: var(--radius);
+    padding: 28px 26px;
+    display: flex;
+    align-items: center;
+    gap: 24px;
+    overflow: hidden;
+    min-height: 148px;
+  }
+
+  .hero-clouddrift {
+    position: absolute;
+    inset: 0;
+    opacity: 0.16;
+    background: linear-gradient(90deg, transparent, var(--mist), transparent);
+    width: 60%;
+    pointer-events: none;
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    .hero-clouddrift {
+      animation: drift 14s linear infinite;
+    }
+  }
+  @keyframes drift {
+    0% { transform: translateX(-60%); }
+    100% { transform: translateX(160%); }
+  }
+
+  .hero-icon { flex: 0 0 auto; width: 72px; height: 72px; color: var(--gold); position: relative; z-index: 1; }
+  .hero-icon svg { width: 100%; height: 100%; }
+
+  .hero-main { position: relative; z-index: 1; flex: 1; min-width: 0; }
+  .hero-date { font-family: 'JetBrains Mono', monospace; font-size: 12.5px; color: var(--muted); margin-bottom: 4px; }
+  .hero-condition { font-family: 'Space Grotesk', sans-serif; font-weight: 600; font-size: 22px; margin: 0 0 2px; }
+  .hero-native { font-size: 13px; color: var(--muted); margin: 0 0 10px; font-style: italic; }
+  .hero-temp { font-family: 'JetBrains Mono', monospace; font-size: 26px; font-weight: 700; }
+  .hero-temp .max { color: var(--gold); }
+  .hero-temp .min { color: var(--mist); margin-left: 6px; font-weight: 500; font-size: 18px; }
+  .hero-when { font-size: 12.5px; color: var(--muted); margin-top: 6px; }
+
+  /* ---------- strip ---------- */
+  .strip {
+    display: flex;
+    gap: 10px;
+    overflow-x: auto;
+    margin: 18px 0 26px;
+    padding-bottom: 6px;
+  }
+  .strip::-webkit-scrollbar { height: 6px; }
+  .strip::-webkit-scrollbar-thumb { background: var(--panel-soft); border-radius: 4px; }
+
+  .day-card {
+    flex: 0 0 auto;
+    width: 108px;
+    background: var(--panel);
+    border-radius: 14px;
+    padding: 14px 10px;
+    text-align: center;
+  }
+  .day-card .d-date { font-family: 'JetBrains Mono', monospace; font-size: 11.5px; color: var(--muted); margin-bottom: 8px; }
+  .day-card .d-icon { width: 32px; height: 32px; margin: 0 auto 8px; color: var(--mist); }
+  .day-card .d-icon svg { width: 100%; height: 100%; }
+  .day-card .d-temp { font-family: 'JetBrains Mono', monospace; font-size: 14px; font-weight: 600; }
+  .day-card .d-temp .max { color: var(--gold); }
+  .day-card .d-temp .min { color: var(--muted); margin-left: 4px; }
+
+  /* ---------- warnings ---------- */
+  .warnings { margin-bottom: 26px; }
+  .warning-card {
+    background: rgba(210,75,61,0.16);
+    border: 1px solid rgba(210,75,61,0.4);
+    border-radius: 14px;
+    padding: 16px 18px;
+    margin-bottom: 10px;
+  }
+  .warning-title { font-family: 'Space Grotesk', sans-serif; font-weight: 600; color: var(--hibiscus); margin: 0 0 4px; font-size: 15px; }
+  .warning-text { font-size: 13.5px; color: var(--cream); margin: 0 0 6px; line-height: 1.45; }
+  .warning-period { font-family: 'JetBrains Mono', monospace; font-size: 11.5px; color: var(--muted); }
+
+  .calm-strip {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: var(--panel);
+    border-radius: 14px;
+    padding: 14px 18px;
+    color: var(--mist);
+    font-size: 13.5px;
+  }
+  .calm-dot { width: 8px; height: 8px; border-radius: 50%; background: #6FCF97; flex: 0 0 auto; }
+
+  /* ---------- footer ---------- */
+  .footer {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 14px;
+    align-items: center;
+    justify-content: space-between;
+    border-top: 1px solid var(--panel);
+    padding-top: 20px;
+    margin-top: 8px;
+  }
+
+  .quake-card { font-size: 12.5px; color: var(--muted); max-width: 420px; line-height: 1.5; }
+  .quake-card strong { color: var(--mist); font-weight: 600; }
+
+  .credit { font-size: 12px; color: var(--muted); display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+
+  .btn-refresh {
+    background: var(--panel);
+    color: var(--mist);
+    border: 1px solid var(--panel-soft);
+    border-radius: 10px;
+    padding: 7px 13px;
+    font-size: 12.5px;
+    cursor: pointer;
+    font-family: 'Inter', sans-serif;
+  }
+  .btn-refresh:hover { background: var(--panel-soft); }
+
+  /* ---------- loading / error ---------- */
+  .skeleton {
+    color: var(--muted);
+    font-size: 13.5px;
+    padding: 20px 0;
+  }
+  .error-box {
+    background: rgba(210,75,61,0.12);
+    border: 1px solid rgba(210,75,61,0.35);
+    border-radius: var(--radius);
+    padding: 22px;
+    font-size: 13.5px;
+    color: var(--cream);
+    line-height: 1.5;
+  }
+  .error-box strong { color: var(--hibiscus); }
+
+  @media (max-width: 520px) {
+    .hero { flex-direction: column; align-items: flex-start; }
+    .hero-icon { width: 56px; height: 56px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="app">
+  <p class="eyebrow">data.gov.my · MET Malaysia</p>
+  <h1 class="title">Ramalan Cuaca</h1>
+  <p class="subtitle">A small live demo of Malaysia's open Weather API — pick a state to see its current 7-day general forecast, sourced straight from MET Malaysia.</p>
+
+  <div id="stateRow" class="state-row"></div>
+
+  <div id="heroSlot"><div class="skeleton">Loading forecast…</div></div>
+  <div id="stripSlot"></div>
+
+  <div id="warningsSlot" class="warnings"></div>
+
+  <div class="footer">
+    <div id="quakeSlot" class="quake-card"></div>
+    <div class="credit">
+      <button id="refreshBtn" class="btn-refresh">↻ Refresh</button>
+      <span id="updatedAt"></span>
+      <span>·</span>
+      <a href="https://developer.data.gov.my/realtime-api/weather" target="_blank" rel="noopener">API docs</a>
+    </div>
+  </div>
+</div>
+
+<script>
+const BASE = 'https://api.data.gov.my/weather';
+const PREFERRED_DEFAULT = 'Selangor';
+
+const CONDITION_DICT = {
+  'berjerebu': 'Hazy',
+  'tiada hujan': 'No rain',
+  'hujan': 'Rain',
+  'hujan di beberapa tempat': 'Scattered rain',
+  'hujan di satu dua tempat': 'Isolated rain',
+  'hujan di satu dua tempat di kawasan pantai': 'Isolated rain (coastal)',
+  'hujan di satu dua tempat di kawasan pedalaman': 'Isolated rain (inland)',
+  'hujan di kebanyakan tempat': 'Rain in most areas',
+  'hujan menyeluruh': 'Widespread rain',
+  'ribut petir': 'Thunderstorms',
+  'ribut petir di beberapa tempat': 'Scattered thunderstorms',
+  'ribut petir di beberapa tempat di kawasan pedalaman': 'Scattered thunderstorms (inland)',
+  'ribut petir di satu dua tempat': 'Isolated thunderstorms',
+  'ribut petir di satu dua tempat di kawasan pantai': 'Isolated thunderstorms (coastal)',
+  'ribut petir di satu dua tempat di kawasan pedalaman': 'Isolated thunderstorms (inland)',
+  'ribut petir di kebanyakan tempat': 'Thunderstorms in most areas',
+  'ribut petir menyeluruh': 'Widespread thunderstorms',
+};
+
+const WHEN_DICT = {
+  'pagi': 'Morning', 'malam': 'Night', 'petang': 'Afternoon',
+  'pagi dan petang': 'Morning & afternoon', 'pagi dan malam': 'Morning & night',
+  'petang dan malam': 'Afternoon & night', 'sepanjang hari': 'All day',
+};
+
+function translateCondition(text){
+  if(!text) return 'No data';
+  const key = text.trim().toLowerCase();
+  if(CONDITION_DICT[key]) return CONDITION_DICT[key];
+  let t = key;
+  const subs = [
+    [/ribut petir/g,'thunderstorms'], [/tiada hujan/g,'no rain'], [/\bhujan\b/g,'rain'],
+    [/berjerebu/g,'hazy'], [/di kebanyakan tempat/g,'in most areas'],
+    [/di beberapa tempat/g,'in scattered areas'], [/di satu dua tempat/g,'in isolated spots'],
+    [/menyeluruh/g,'widespread'], [/kawasan pantai/g,'coastal areas'],
+    [/kawasan pedalaman/g,'inland areas'], [/\bdi\b/g,'in'],
+  ];
+  subs.forEach(([re,rep]) => t = t.replace(re, rep));
+  return t.charAt(0).toUpperCase() + t.slice(1);
+}
+
+function translateWhen(text){
+  if(!text) return '';
+  return WHEN_DICT[text.trim().toLowerCase()] || text;
+}
+
+function classify(text){
+  const t = (text || '').toLowerCase();
+  if(t.includes('ribut petir')) return 'storm';
+  if(t.includes('berjerebu')) return 'haze';
+  if(t.includes('tiada hujan')) return 'clear';
+  if(t.includes('hujan')) return 'rain';
+  return 'clear';
+}
+
+const ICONS = {
+  storm: `<svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M18 38a10 10 0 0 1-2-19.8A13 13 0 0 1 41 14a11 11 0 0 1 9 17.3" />
+    <path d="M16 38h30a8 8 0 0 0 0-16" />
+    <path d="M30 40l-6 11h7l-5 9" fill="none" stroke="#E3A23C" />
+  </svg>`,
+  rain: `<svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M16 36a10 10 0 0 1-2-19.8A13 13 0 0 1 41 12a11 11 0 0 1 9 17.3" />
+    <path d="M14 36h32a8 8 0 0 0 0-16" />
+    <path d="M22 44l-3 8M32 44l-3 8M42 44l-3 8" />
+  </svg>`,
+  haze: `<svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="32" cy="26" r="11" />
+    <path d="M12 26h6M50 26h6M32 4v6M32 42v6M14 8l4 4M46 8l-4 4" />
+    <path d="M8 46h48M12 54h40" opacity="0.6" />
+  </svg>`,
+  clear: `<svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="32" cy="32" r="13" />
+    <path d="M32 6v8M32 50v8M6 32h8M50 32h8M13 13l6 6M45 45l6 6M51 13l-6 6M19 45l-6 6" />
+  </svg>`,
+};
+
+function dayLabel(dateStr){
+  const d = new Date(dateStr + 'T00:00:00+08:00');
+  return d.toLocaleDateString('en-GB', { weekday: 'short', day: 'numeric', month: 'short' });
+}
+
+let stateData = {};   // name -> sorted array of forecast rows
+let activeState = null;
+
+async function fetchJSON(url){
+  const res = await fetch(url);
+  if(!res.ok) throw new Error('HTTP ' + res.status);
+  return res.json();
+}
+
+async function loadForecast(){
+  const heroSlot = document.getElementById('heroSlot');
+  const stripSlot = document.getElementById('stripSlot');
+  const stateRow = document.getElementById('stateRow');
+  heroSlot.innerHTML = '<div class="skeleton">Loading forecast…</div>';
+  stripSlot.innerHTML = '';
+  stateRow.innerHTML = '';
+
+  try {
+    const rows = await fetchJSON(`${BASE}/forecast?contains=St@location__location_id&limit=250`);
+    stateData = {};
+    rows.forEach(r => {
+      const name = r.location.location_name;
+      (stateData[name] ||= []).push(r);
+    });
+    Object.keys(stateData).forEach(name => stateData[name].sort((a,b) => a.date.localeCompare(b.date)));
+
+    const names = Object.keys(stateData).sort();
+    if(names.length === 0) throw new Error('No state-level records returned');
+
+    stateRow.innerHTML = names.map(n =>
+      `<button class="pill" data-name="${n}" type="button">${n}</button>`
+    ).join('');
+
+    stateRow.querySelectorAll('.pill').forEach(btn => {
+      btn.addEventListener('click', () => selectState(btn.dataset.name));
+    });
+
+    const initial = names.includes(PREFERRED_DEFAULT) ? PREFERRED_DEFAULT : names[0];
+    selectState(initial);
+  } catch(err){
+    heroSlot.innerHTML = `<div class="error-box"><strong>Couldn't load the forecast.</strong><br>
+      ${err.message}. This is usually a network/CORS hiccup talking to api.data.gov.my from the browser —
+      try the refresh button, or open the endpoint directly to confirm it's reachable.</div>`;
+  }
+}
+
+function selectState(name){
+  activeState = name;
+  document.querySelectorAll('#stateRow .pill').forEach(p => {
+    p.classList.toggle('active', p.dataset.name === name);
+  });
+  const days = stateData[name];
+  if(!days || days.length === 0) return;
+  renderHero(days[0]);
+  renderStrip(days.slice(1, 7));
+}
+
+function renderHero(day){
+  const kind = classify(day.summary_forecast);
+  document.getElementById('heroSlot').innerHTML = `
+    <div class="hero">
+      <div class="hero-clouddrift"></div>
+      <div class="hero-icon">${ICONS[kind]}</div>
+      <div class="hero-main">
+        <div class="hero-date">${dayLabel(day.date)}</div>
+        <p class="hero-condition">${translateCondition(day.summary_forecast)}</p>
+        <p class="hero-native">"${day.summary_forecast}"</p>
+        <div class="hero-temp"><span class="max">${day.max_temp}°</span><span class="min">${day.min_temp}° low</span></div>
+        <div class="hero-when">${translateWhen(day.summary_when)}</div>
+      </div>
+    </div>`;
+}
+
+function renderStrip(days){
+  document.getElementById('stripSlot').innerHTML = `<div class="strip">${
+    days.map(d => {
+      const kind = classify(d.summary_forecast);
+      return `<div class="day-card">
+        <div class="d-date">${dayLabel(d.date)}</div>
+        <div class="d-icon">${ICONS[kind]}</div>
+        <div class="d-temp"><span class="max">${d.max_temp}°</span><span class="min">${d.min_temp}°</span></div>
+      </div>`;
+    }).join('')
+  }</div>`;
+}
+
+async function loadWarnings(){
+  const slot = document.getElementById('warningsSlot');
+  try {
+    const rows = await fetchJSON(`${BASE}/warning?sort=-valid_to&limit=8`);
+    const now = new Date();
+    const active = rows.filter(w => w.valid_to && new Date(w.valid_to) >= now);
+
+    if(active.length === 0){
+      slot.innerHTML = `<div class="calm-strip"><span class="calm-dot"></span> No active weather warnings issued by MET Malaysia right now.</div>`;
+      return;
+    }
+    slot.innerHTML = active.slice(0, 4).map(w => `
+      <div class="warning-card">
+        <p class="warning-title">${w.heading_en || w.title_en || 'Weather warning'}</p>
+        <p class="warning-text">${w.text_en || ''} ${w.instruction_en ? '— ' + w.instruction_en : ''}</p>
+        <p class="warning-period">Valid ${formatPeriod(w.valid_from)} → ${formatPeriod(w.valid_to)}</p>
+      </div>`).join('');
+  } catch(err){
+    slot.innerHTML = '';
+  }
+}
+
+function formatPeriod(ts){
+  if(!ts) return '—';
+  const d = new Date(ts);
+  return d.toLocaleString('en-GB', { day:'numeric', month:'short', hour:'2-digit', minute:'2-digit' });
+}
+
+async function loadEarthquake(){
+  const slot = document.getElementById('quakeSlot');
+  try {
+    const rows = await fetchJSON(`${BASE}/warning/earthquake?sort=-localdatetime&limit=1`);
+    if(!rows.length){ slot.innerHTML = ''; return; }
+    const q = rows[0];
+    slot.innerHTML = `Latest regional seismic activity: <strong>M${q.magdefault} ${q.magtypedefault}</strong>,
+      ${q.location_original} (${q.n_distancemas || ''}) — ${formatPeriod(q.localdatetime)} MYT.`;
+  } catch(err){
+    slot.innerHTML = '';
+  }
+}
+
+function stampUpdated(){
+  document.getElementById('updatedAt').textContent =
+    'Updated ' + new Date().toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' });
+}
+
+async function loadAll(){
+  await loadForecast();
+  loadWarnings();
+  loadEarthquake();
+  stampUpdated();
+}
+
+document.getElementById('refreshBtn').addEventListener('click', loadAll);
+loadAll();
+</script>
+
+</body>
+</html>
