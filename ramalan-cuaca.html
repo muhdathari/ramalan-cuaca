@@ -384,6 +384,12 @@ async function loadAll(){
 
 document.getElementById('refreshBtn').onclick=loadAll;
 loadAll();
+
+// Auto-refresh wind & pressure every 5 seconds
+setInterval(()=>{
+  const sel=document.getElementById('stateSelect');
+  if(sel&&sel.value)loadLiveWeather(sel.value);
+},5000);
 </script>
 </body>
 </html>
