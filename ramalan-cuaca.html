@@ -6,194 +6,181 @@
 <title>Ramalan Cuaca</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
-  *{box-sizing:border-box;margin:0;padding:0;}
-  html,body{
-    font-family:'Inter',sans-serif;
-    font-size:11px;
-    background:#0f2e28;
-    color:#e8f5f0;
-    width:100%;
-    -webkit-font-smoothing:antialiased;
-  }
-  .wrap{
-    width:100%;
-    padding:6px;
-    display:flex;
-    flex-direction:column;
-    gap:4px;
-  }
+*{box-sizing:border-box;margin:0;padding:0;}
+html,body{
+  font-family:'Inter',sans-serif;
+  background:#0f2e28;
+  color:#e8f5f0;
+  width:100%;
+  font-size:11px;
+  -webkit-font-smoothing:antialiased;
+}
+.wrap{width:100%;padding:5px;display:flex;flex-direction:column;gap:4px;}
 
-  /* ── header ── */
-  .hdr{
-    background:#1a4a42;
-    border-radius:6px;
-    padding:5px 8px;
-    display:flex;
-    align-items:center;
-    gap:6px;
-  }
-  .hdr-title{
-    font-size:10.5px;font-weight:700;color:#fff;
-    white-space:nowrap;letter-spacing:0.02em;
-  }
-  .hdr-right{display:flex;align-items:center;gap:4px;flex:1;justify-content:flex-end;min-width:0;}
-  select{
-    background:#0f2e28;color:#9dd4c0;
-    border:1px solid #2a6b5e;border-radius:5px;
-    padding:2px 4px;font-size:10px;
-    font-family:'Inter',sans-serif;cursor:pointer;
-    max-width:140px;outline:none;
-  }
-  select:focus{border-color:#4db89a;}
-  .btn-ref{
-    background:none;border:none;color:#6ab89e;
-    cursor:pointer;font-size:13px;line-height:1;
-    padding:1px;flex-shrink:0;
-  }
-  .btn-ref:hover{color:#9dd4c0;}
+/* header */
+.hdr{
+  background:#1a4a42;border-radius:5px;
+  padding:4px 8px;display:flex;align-items:center;gap:6px;
+}
+.hdr-title{font-size:10px;font-weight:700;color:#fff;white-space:nowrap;}
+.hdr-right{display:flex;align-items:center;gap:4px;flex:1;justify-content:flex-end;}
+select{
+  background:#0f2e28;color:#9dd4c0;border:1px solid #2a6b5e;
+  border-radius:4px;padding:2px 4px;font-size:10px;
+  font-family:'Inter',sans-serif;cursor:pointer;max-width:130px;outline:none;
+}
+.btn-sm{
+  background:none;border:none;color:#6ab89e;cursor:pointer;
+  font-size:12px;line-height:1;padding:1px;flex-shrink:0;
+}
+.btn-sm:hover{color:#fff;}
 
-  /* ── condition card ── */
-  .cond-card{
-    background:#1a4a42;border-radius:6px;
-    padding:6px 8px;display:flex;align-items:center;gap:7px;
-  }
-  .cond-icon{flex-shrink:0;width:28px;height:28px;color:#f0b841;}
-  .cond-icon svg{width:100%;height:100%;}
-  .cond-info{flex:1;min-width:0;}
-  .cond-date{font-size:9px;color:#6ab89e;margin-bottom:1px;}
-  .cond-text{font-size:11.5px;font-weight:700;color:#fff;line-height:1.2;margin-bottom:1px;}
-  .cond-bm{font-size:9.5px;color:#6ab89e;font-style:italic;margin-bottom:2px;
-    white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
-  .cond-when{font-size:9.5px;color:#9dd4c0;}
+/* main card — condition + data rows side by side */
+.main-card{background:#1a4a42;border-radius:5px;overflow:hidden;}
 
-  /* ── data rows ── */
-  .data-panel{background:#1a4a42;border-radius:6px;overflow:hidden;}
-  .data-row{
-    display:flex;align-items:center;
-    justify-content:space-between;
-    padding:5px 8px;
-    border-bottom:1px solid #0f2e28;
-  }
-  .data-row:last-child{border-bottom:none;}
-  .data-label{font-size:10px;color:#9dd4c0;}
-  .data-val{
-    font-size:12px;font-weight:700;color:#4db89a;
-    display:flex;align-items:baseline;gap:3px;
-  }
-  .data-val .unit{font-size:9px;font-weight:500;color:#6ab89e;}
-  .data-val.na{color:#3a7a6a;font-size:10px;font-weight:500;}
-  .live-dot{
-    width:5px;height:5px;border-radius:50%;
-    background:#4db89a;display:inline-block;
-    margin-left:3px;vertical-align:middle;
-    animation:pulse 2s infinite;
-  }
-  @keyframes pulse{0%,100%{opacity:1;}50%{opacity:0.3;}}
+.cond-row{
+  display:flex;align-items:center;gap:7px;
+  padding:6px 8px;border-bottom:1px solid #0f2e28;
+}
+.cond-icon{flex-shrink:0;width:24px;height:24px;color:#f0b841;}
+.cond-icon svg{width:100%;height:100%;}
+.cond-info{flex:1;min-width:0;}
+.cond-date{font-size:8.5px;color:#6ab89e;}
+.cond-text{font-size:10.5px;font-weight:700;color:#fff;line-height:1.2;}
+.cond-bm{font-size:8.5px;color:#6ab89e;font-style:italic;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.cond-when{font-size:8.5px;color:#9dd4c0;}
 
-  /* ── 5-day strip ── */
-  .sec-label{
-    font-size:9px;font-weight:600;text-transform:uppercase;
-    letter-spacing:0.08em;color:#4d8a78;padding:0 2px;
-  }
-  .strip{
-    display:flex;gap:4px;overflow-x:auto;
-    scrollbar-width:thin;scrollbar-color:#1a4a42 transparent;
-  }
-  .strip::-webkit-scrollbar{height:3px;}
-  .strip::-webkit-scrollbar-thumb{background:#1a4a42;border-radius:2px;}
-  .day{
-    flex:0 0 auto;width:50px;
-    background:#1a4a42;border-radius:5px;
-    padding:5px 3px;text-align:center;
-  }
-  .day .d-date{font-size:8.5px;color:#6ab89e;margin-bottom:2px;line-height:1.3;}
-  .day .d-icon{width:18px;height:18px;margin:0 auto 3px;color:#9dd4c0;}
-  .day .d-icon svg{width:100%;height:100%;}
-  .day .d-temp{font-size:10px;font-weight:600;}
-  .day .d-temp .mx{color:#f0b841;}
-  .day .d-temp .mn{color:#6ab89e;margin-left:2px;}
+.data-row{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:4px 8px;border-bottom:1px solid #0f2e28;
+}
+.data-row:last-child{border-bottom:none;}
+.data-label{font-size:9.5px;color:#9dd4c0;display:flex;align-items:center;gap:3px;}
+.data-val{font-size:11px;font-weight:700;color:#4db89a;display:flex;align-items:baseline;gap:2px;}
+.unit{font-size:8.5px;font-weight:500;color:#6ab89e;}
+.na{color:#3a7a6a;}
+.live-dot{
+  width:4px;height:4px;border-radius:50%;background:#4db89a;
+  display:inline-block;animation:pulse 2s infinite;flex-shrink:0;
+}
+@keyframes pulse{0%,100%{opacity:1;}50%{opacity:0.3;}}
 
-  /* ── warnings ── */
-  .warn-card{
-    background:rgba(200,60,50,0.15);
-    border:1px solid rgba(200,60,50,0.35);
-    border-radius:5px;padding:5px 7px;margin-bottom:4px;
-  }
-  .warn-card:last-child{margin-bottom:0;}
-  .warn-title{font-size:10px;font-weight:700;color:#e05a4a;margin-bottom:2px;}
-  .warn-text{font-size:9.5px;color:#e8f5f0;line-height:1.4;margin-bottom:2px;}
-  .warn-period{font-size:8.5px;color:#6ab89e;}
-  .calm{
-    display:flex;align-items:center;gap:4px;
-    background:#1a4a42;border-radius:5px;
-    padding:5px 7px;font-size:10px;color:#6ab89e;
-  }
-  .calm-dot{width:6px;height:6px;border-radius:50%;background:#4db89a;flex-shrink:0;}
+/* 3-day strip */
+.strip-wrap{background:#1a4a42;border-radius:5px;padding:5px 6px;}
+.strip-hdr{
+  display:flex;align-items:center;justify-content:space-between;
+  margin-bottom:4px;
+}
+.sec-label{font-size:8.5px;font-weight:600;text-transform:uppercase;letter-spacing:0.08em;color:#4d8a78;}
+.strip{display:flex;gap:3px;}
+.day{
+  flex:1;background:#0f2e28;border-radius:4px;
+  padding:4px 2px;text-align:center;
+}
+.d-date{font-size:8px;color:#6ab89e;margin-bottom:2px;line-height:1.3;}
+.d-icon{width:16px;height:16px;margin:0 auto 2px;color:#9dd4c0;}
+.d-icon svg{width:100%;height:100%;}
+.d-temp{font-size:9px;font-weight:600;}
+.mx{color:#f0b841;}.mn{color:#6ab89e;margin-left:1px;}
 
-  .skeleton{color:#4d8a78;font-size:10px;padding:5px;text-align:center;}
-  .updated{font-size:8.5px;color:#3a6a5a;text-align:right;padding:0 2px;}
+/* warnings — collapsible */
+.warn-toggle{
+  background:#1a4a42;border:none;border-radius:5px;
+  width:100%;padding:4px 8px;
+  display:flex;align-items:center;justify-content:space-between;
+  cursor:pointer;color:#e8f5f0;font-family:'Inter',sans-serif;
+}
+.warn-toggle-left{display:flex;align-items:center;gap:5px;font-size:9.5px;font-weight:600;}
+.warn-count{
+  background:rgba(200,60,50,0.4);color:#e05a4a;
+  border-radius:10px;padding:1px 6px;font-size:8.5px;font-weight:700;
+}
+.warn-chevron{font-size:9px;color:#6ab89e;transition:transform 0.2s;}
+.warn-chevron.open{transform:rotate(180deg);}
+
+.warn-body{display:none;}
+.warn-body.open{display:flex;flex-direction:column;gap:3px;padding-top:3px;}
+.warn-card{
+  background:rgba(200,60,50,0.13);border:1px solid rgba(200,60,50,0.3);
+  border-radius:4px;padding:5px 7px;
+}
+.warn-title{font-size:9.5px;font-weight:700;color:#e05a4a;margin-bottom:2px;}
+.warn-text{font-size:8.5px;color:#e8f5f0;line-height:1.4;margin-bottom:2px;}
+.warn-period{font-size:8px;color:#6ab89e;}
+.calm{
+  display:flex;align-items:center;gap:5px;
+  background:#1a4a42;border-radius:5px;
+  padding:4px 8px;font-size:9px;color:#6ab89e;
+}
+.calm-dot{width:5px;height:5px;border-radius:50%;background:#4db89a;flex-shrink:0;}
+
+.updated{font-size:8px;color:#3a6a5a;text-align:right;padding:0 2px;}
+.skeleton{color:#4d8a78;font-size:10px;padding:8px;text-align:center;}
 </style>
 </head>
 <body>
 <div class="wrap">
 
+  <!-- header -->
   <div class="hdr">
     <span class="hdr-title">☁ Ramalan Cuaca</span>
     <div class="hdr-right">
       <select id="stateSelect"><option>Loading…</option></select>
-      <button class="btn-ref" id="refreshBtn" title="Refresh">↻</button>
+      <button class="btn-sm" id="refreshBtn" title="Refresh">↻</button>
     </div>
   </div>
 
-  <div id="condSlot"><div class="skeleton">Loading…</div></div>
-
-  <div class="data-panel">
+  <!-- condition + data in one card -->
+  <div class="main-card">
+    <div id="condSlot"><div class="skeleton">Loading…</div></div>
     <div class="data-row">
       <span class="data-label">Temperature</span>
       <span class="data-val" id="rowTemp"><span class="na">—</span></span>
     </div>
     <div class="data-row">
-      <span class="data-label">Wind <span id="windDot"></span></span>
-      <span class="data-val" id="rowWind"><span class="na">—</span> <span class="unit">km/h</span></span>
+      <span class="data-label">Wind <span class="live-dot" id="windDot" style="display:none"></span></span>
+      <span class="data-val" id="rowWind"><span class="na">—</span><span class="unit">km/h</span></span>
     </div>
     <div class="data-row">
-      <span class="data-label">Pressure <span id="pressDot"></span></span>
-      <span class="data-val" id="rowPressure"><span class="na">—</span> <span class="unit">hPa</span></span>
+      <span class="data-label">Pressure <span class="live-dot" id="pressDot" style="display:none"></span></span>
+      <span class="data-val" id="rowPressure"><span class="na">—</span><span class="unit">hPa</span></span>
     </div>
   </div>
 
-  <span class="sec-label">5-Day Outlook</span>
-  <div class="strip" id="stripSlot"></div>
+  <!-- 3-day strip -->
+  <div class="strip-wrap">
+    <div class="strip-hdr">
+      <span class="sec-label">3-Day Outlook</span>
+      <span class="updated" id="updatedAt"></span>
+    </div>
+    <div class="strip" id="stripSlot"></div>
+  </div>
 
-  <span class="sec-label" id="warnLabel" style="display:none">⚠ Active Warnings</span>
-  <div id="warnSlot"></div>
+  <!-- warnings collapsible -->
+  <div id="warnSection"></div>
 
-  <span class="updated" id="updatedAt"></span>
 </div>
-
 <script>
-const BASE = 'https://api.data.gov.my/weather';
-const EXCLUDE = ['sabah','sarawak','labuan'];
-const PREFERRED = 'Selangor';
-
-// Coordinates for each Peninsular Malaysian state (for Open-Meteo wind/pressure)
-const STATE_COORDS = {
-  'Johor':             { lat: 1.4854,  lon: 103.7618 },
-  'Kedah':             { lat: 6.1184,  lon: 100.3685 },
-  'Kelantan':          { lat: 6.1254,  lon: 102.2381 },
-  'Melaka':            { lat: 2.1896,  lon: 102.2501 },
-  'Negeri Sembilan':   { lat: 2.7258,  lon: 101.9424 },
-  'Pahang':            { lat: 3.8126,  lon: 103.3256 },
-  'Perak':             { lat: 4.5921,  lon: 101.0901 },
-  'Perlis':            { lat: 6.4449,  lon: 100.2048 },
-  'Pulau Pinang':      { lat: 5.4141,  lon: 100.3288 },
-  'Selangor':          { lat: 3.0738,  lon: 101.5183 },
-  'Terengganu':        { lat: 5.3117,  lon: 103.1324 },
-  'WP Kuala Lumpur':   { lat: 3.1390,  lon: 101.6869 },
-  'WP Putrajaya':      { lat: 2.9264,  lon: 101.6964 },
+const BASE='https://api.data.gov.my/weather';
+const EXCLUDE=['sabah','sarawak','labuan'];
+const PREFERRED='Selangor';
+const STATE_COORDS={
+  'Johor':{lat:1.4854,lon:103.7618},
+  'Kedah':{lat:6.1184,lon:100.3685},
+  'Kelantan':{lat:6.1254,lon:102.2381},
+  'Melaka':{lat:2.1896,lon:102.2501},
+  'Negeri Sembilan':{lat:2.7258,lon:101.9424},
+  'Pahang':{lat:3.8126,lon:103.3256},
+  'Perak':{lat:4.5921,lon:101.0901},
+  'Perlis':{lat:6.4449,lon:100.2048},
+  'Pulau Pinang':{lat:5.4141,lon:100.3288},
+  'Selangor':{lat:3.0738,lon:101.5183},
+  'Terengganu':{lat:5.3117,lon:103.1324},
+  'WP Kuala Lumpur':{lat:3.1390,lon:101.6869},
+  'WP Putrajaya':{lat:2.9264,lon:101.6964},
 };
-
-const CDICT = {
+const CDICT={
   'berjerebu':'Hazy','tiada hujan':'No rain','hujan':'Rain',
   'hujan di beberapa tempat':'Scattered rain',
   'hujan di satu dua tempat':'Isolated rain',
@@ -210,12 +197,11 @@ const CDICT = {
   'ribut petir di kebanyakan tempat':'T-storms in most areas',
   'ribut petir menyeluruh':'Widespread thunderstorms',
 };
-const WDICT = {
+const WDICT={
   'pagi':'Morning','malam':'Night','petang':'Afternoon',
-  'pagi dan petang':'Morning & afternoon','pagi dan malam':'Morning & night',
-  'petang dan malam':'Afternoon & night','sepanjang hari':'All day',
+  'pagi dan petang':'Morn & aft','pagi dan malam':'Morn & night',
+  'petang dan malam':'Aft & night','sepanjang hari':'All day',
 };
-
 function tc(t){
   if(!t)return'No data';
   const k=t.trim().toLowerCase();
@@ -239,77 +225,63 @@ function cls(t){
   return'clear';
 }
 const ICO={
-  storm:`<svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M18 38a10 10 0 0 1-2-19.8A13 13 0 0 1 41 14a11 11 0 0 1 9 17.3"/><path d="M16 38h30a8 8 0 0 0 0-16"/><path d="M30 40l-6 11h7l-5 9" stroke="#f0b841"/></svg>`,
-  rain:`<svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M16 36a10 10 0 0 1-2-19.8A13 13 0 0 1 41 12a11 11 0 0 1 9 17.3"/><path d="M14 36h32a8 8 0 0 0 0-16"/><path d="M22 44l-3 8M32 44l-3 8M42 44l-3 8"/></svg>`,
-  haze:`<svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><circle cx="32" cy="26" r="11"/><path d="M12 26h6M50 26h6M32 4v6M32 42v6M14 8l4 4M46 8l-4 4"/><path d="M8 46h48M12 54h40" opacity="0.5"/></svg>`,
-  clear:`<svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><circle cx="32" cy="32" r="13"/><path d="M32 6v8M32 50v8M6 32h8M50 32h8M13 13l6 6M45 45l6 6M51 13l-6 6M19 45l-6 6"/></svg>`,
+  storm:`<svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 38a10 10 0 0 1-2-19.8A13 13 0 0 1 41 14a11 11 0 0 1 9 17.3"/><path d="M16 38h30a8 8 0 0 0 0-16"/><path d="M30 40l-6 11h7l-5 9" stroke="#f0b841"/></svg>`,
+  rain:`<svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><path d="M16 36a10 10 0 0 1-2-19.8A13 13 0 0 1 41 12a11 11 0 0 1 9 17.3"/><path d="M14 36h32a8 8 0 0 0 0-16"/><path d="M22 44l-3 8M32 44l-3 8M42 44l-3 8"/></svg>`,
+  haze:`<svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="32" cy="26" r="11"/><path d="M12 26h6M50 26h6M32 4v6M32 42v6"/><path d="M8 46h48M12 54h40" opacity="0.5"/></svg>`,
+  clear:`<svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="32" cy="32" r="13"/><path d="M32 6v8M32 50v8M6 32h8M50 32h8M13 13l6 6M45 45l6 6M51 13l-6 6M19 45l-6 6"/></svg>`,
 };
-
 function dayLabel(d){
   return new Date(d+'T00:00:00+08:00')
     .toLocaleDateString('en-GB',{weekday:'short',day:'numeric',month:'short'});
 }
-function fmtPeriod(ts){
+function fmtP(ts){
   if(!ts)return'—';
   return new Date(ts).toLocaleString('en-GB',{day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'});
 }
-
 let stateData={};
-
 async function fetchJ(url){
-  const r=await fetch(url);
-  if(!r.ok)throw new Error('HTTP '+r.status);
-  return r.json();
+  const r=await fetch(url);if(!r.ok)throw new Error('HTTP '+r.status);return r.json();
 }
-
 async function loadForecast(){
   document.getElementById('condSlot').innerHTML='<div class="skeleton">Loading…</div>';
   try{
     const rows=await fetchJ(`${BASE}/forecast?contains=St@location__location_id&limit=250`);
     stateData={};
-    rows.forEach(r=>{
-      const n=r.location.location_name;
-      (stateData[n]||=[]).push(r);
-    });
+    rows.forEach(r=>{const n=r.location.location_name;(stateData[n]||=[]).push(r);});
     Object.keys(stateData).forEach(n=>stateData[n].sort((a,b)=>a.date.localeCompare(b.date)));
-    const names=Object.keys(stateData)
-      .filter(n=>!EXCLUDE.some(ex=>n.toLowerCase().includes(ex)))
-      .sort();
+    const names=Object.keys(stateData).filter(n=>!EXCLUDE.some(ex=>n.toLowerCase().includes(ex))).sort();
     const sel=document.getElementById('stateSelect');
     sel.innerHTML=names.map(n=>`<option value="${n}">${n}</option>`).join('');
     sel.value=names.includes(PREFERRED)?PREFERRED:names[0];
     sel.onchange=()=>selectState(sel.value);
     selectState(sel.value);
   }catch(e){
-    document.getElementById('condSlot').innerHTML=
-      `<div class="skeleton" style="color:#e05a4a">Error: ${e.message}</div>`;
+    document.getElementById('condSlot').innerHTML=`<div class="skeleton" style="color:#e05a4a">Error: ${e.message}</div>`;
   }
 }
-
 function selectState(name){
   const days=stateData[name];
   if(!days||!days.length)return;
   renderCond(days[0]);
-  renderStrip(days.slice(1,6));
+  renderStrip(days.slice(1,4));
   loadLiveWeather(name);
 }
-
 function renderCond(d){
   const k=cls(d.summary_forecast);
   document.getElementById('condSlot').innerHTML=`
-    <div class="cond-card">
+    <div class="cond-row">
       <div class="cond-icon">${ICO[k]}</div>
       <div class="cond-info">
         <div class="cond-date">${dayLabel(d.date)}</div>
         <div class="cond-text">${tc(d.summary_forecast)}</div>
         <div class="cond-bm">"${d.summary_forecast}"</div>
-        <div class="cond-when">${tw(d.summary_when)||'&nbsp;'}</div>
+        <div class="cond-when">${tw(d.summary_when)||''}</div>
       </div>
     </div>`;
   document.getElementById('rowTemp').innerHTML=
-    `<span style="color:#f0b841">${d.max_temp}</span><span class="unit">°C max</span>&nbsp;<span style="color:#9dd4c0;font-size:12px">${d.min_temp}°</span><span class="unit">min</span>`;
+    `<span style="color:#f0b841">${d.max_temp}</span><span class="unit">°C max</span>
+     <span style="color:#9dd4c0;font-size:10px;margin-left:3px">${d.min_temp}°</span><span class="unit">min</span>`;
 }
-
 function renderStrip(days){
   document.getElementById('stripSlot').innerHTML=days.map(d=>{
     const k=cls(d.summary_forecast);
@@ -320,75 +292,69 @@ function renderStrip(days){
     </div>`;
   }).join('');
 }
-
-async function loadLiveWeather(stateName){
-  // Reset
-  document.getElementById('rowWind').innerHTML=`<span class="na">—</span> <span class="unit">km/h</span>`;
-  document.getElementById('rowPressure').innerHTML=`<span class="na">—</span> <span class="unit">hPa</span>`;
-  document.getElementById('windDot').innerHTML='';
-  document.getElementById('pressDot').innerHTML='';
-
-  const coords=STATE_COORDS[stateName];
-  if(!coords)return;
-
+async function loadLiveWeather(name){
+  document.getElementById('rowWind').innerHTML=`<span class="na">—</span><span class="unit">km/h</span>`;
+  document.getElementById('rowPressure').innerHTML=`<span class="na">—</span><span class="unit">hPa</span>`;
+  document.getElementById('windDot').style.display='none';
+  document.getElementById('pressDot').style.display='none';
+  const c=STATE_COORDS[name];if(!c)return;
   try{
-    const url=`https://api.open-meteo.com/v1/forecast?latitude=${coords.lat}&longitude=${coords.lon}&current=wind_speed_10m,surface_pressure&wind_speed_unit=kmh&timezone=Asia%2FKuala_Lumpur`;
-    const data=await fetchJ(url);
-    const c=data.current;
-    if(c){
-      document.getElementById('rowWind').innerHTML=
-        `<span style="color:#4db89a">${Math.round(c.wind_speed_10m)}</span><span class="unit">km/h</span>`;
-      document.getElementById('rowPressure').innerHTML=
-        `<span style="color:#4db89a">${Math.round(c.surface_pressure)}</span><span class="unit">hPa</span>`;
-      document.getElementById('windDot').innerHTML='<span class="live-dot"></span>';
-      document.getElementById('pressDot').innerHTML='<span class="live-dot"></span>';
+    const data=await fetchJ(`https://api.open-meteo.com/v1/forecast?latitude=${c.lat}&longitude=${c.lon}&current=wind_speed_10m,surface_pressure&wind_speed_unit=kmh&timezone=Asia%2FKuala_Lumpur`);
+    const cur=data.current;
+    if(cur){
+      document.getElementById('rowWind').innerHTML=`<span style="color:#4db89a">${Math.round(cur.wind_speed_10m)}</span><span class="unit">km/h</span>`;
+      document.getElementById('rowPressure').innerHTML=`<span style="color:#4db89a">${Math.round(cur.surface_pressure)}</span><span class="unit">hPa</span>`;
+      document.getElementById('windDot').style.display='inline-block';
+      document.getElementById('pressDot').style.display='inline-block';
     }
-  }catch(e){
-    // silently fail — keep showing —
-  }
+  }catch(e){}
 }
-
 async function loadWarnings(){
-  const slot=document.getElementById('warnSlot');
-  const lbl=document.getElementById('warnLabel');
+  const slot=document.getElementById('warnSection');
   try{
     const rows=await fetchJ(`${BASE}/warning?sort=-valid_to&limit=8`);
     const now=new Date();
     const active=rows.filter(w=>w.valid_to&&new Date(w.valid_to)>=now);
     if(!active.length){
-      lbl.style.display='none';
-      slot.innerHTML=`<div class="calm"><span class="calm-dot"></span>No active warnings from MET Malaysia.</div>`;
+      slot.innerHTML=`<div class="calm"><span class="calm-dot"></span>No active MET Malaysia warnings.</div>`;
       return;
     }
-    lbl.style.display='';
-    slot.innerHTML=active.slice(0,3).map(w=>`
-      <div class="warn-card">
-        <div class="warn-title">${w.heading_en||w.title_en||'Weather Warning'}</div>
-        <div class="warn-text">${w.text_en||''}</div>
-        <div class="warn-period">Valid ${fmtPeriod(w.valid_from)} → ${fmtPeriod(w.valid_to)}</div>
-      </div>`).join('');
+    slot.innerHTML=`
+      <button class="warn-toggle" onclick="toggleWarn()">
+        <span class="warn-toggle-left">⚠ Active Warnings <span class="warn-count">${active.length}</span></span>
+        <span class="warn-chevron" id="chevron">▼</span>
+      </button>
+      <div class="warn-body" id="warnBody">
+        ${active.slice(0,3).map(w=>`
+          <div class="warn-card">
+            <div class="warn-title">${w.heading_en||w.title_en||'Warning'}</div>
+            <div class="warn-text">${w.text_en||''}</div>
+            <div class="warn-period">Valid ${fmtP(w.valid_from)} → ${fmtP(w.valid_to)}</div>
+          </div>`).join('')}
+      </div>`;
   }catch(e){slot.innerHTML='';}
 }
-
+function toggleWarn(){
+  const body=document.getElementById('warnBody');
+  const chev=document.getElementById('chevron');
+  body.classList.toggle('open');
+  chev.classList.toggle('open');
+}
 function stamp(){
   document.getElementById('updatedAt').textContent=
-    'MET Malaysia + Open-Meteo · Updated '+
-    new Date().toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'});
+    'Updated '+new Date().toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'});
 }
-
 async function loadAll(){
   await loadForecast();
   loadWarnings();
   stamp();
 }
-
 document.getElementById('refreshBtn').onclick=loadAll;
 loadAll();
-
-// Auto-refresh wind & pressure every 5 seconds
 setInterval(()=>{
   const sel=document.getElementById('stateSelect');
   if(sel&&sel.value)loadLiveWeather(sel.value);
+  stamp();
 },5000);
 </script>
 </body>
