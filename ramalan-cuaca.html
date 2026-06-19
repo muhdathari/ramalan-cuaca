@@ -12,18 +12,15 @@
     font-size:13px;
     background:#0f2e28;
     color:#e8f5f0;
-    height:100%;
+    width:100%;
     -webkit-font-smoothing:antialiased;
   }
-
   .wrap{
     width:100%;
-    max-width:340px;
-    margin:0 auto;
     padding:10px;
     display:flex;
     flex-direction:column;
-    gap:8px;
+    gap:7px;
   }
 
   /* ── header ── */
@@ -33,81 +30,46 @@
     padding:8px 12px;
     display:flex;
     align-items:center;
-    justify-content:space-between;
     gap:8px;
   }
   .hdr-title{
-    font-size:12px;
-    font-weight:700;
-    color:#fff;
-    letter-spacing:0.02em;
-    white-space:nowrap;
+    font-size:12px;font-weight:700;color:#fff;
+    white-space:nowrap;letter-spacing:0.02em;
   }
-  .hdr-right{
-    display:flex;
-    align-items:center;
-    gap:6px;
-    flex:1;
-    justify-content:flex-end;
-    min-width:0;
-  }
+  .hdr-right{display:flex;align-items:center;gap:6px;flex:1;justify-content:flex-end;min-width:0;}
   select{
-    background:#0f2e28;
-    color:#9dd4c0;
-    border:1px solid #2a6b5e;
-    border-radius:5px;
-    padding:3px 6px;
-    font-size:11.5px;
-    font-family:'Inter',sans-serif;
-    cursor:pointer;
-    max-width:140px;
-    outline:none;
+    background:#0f2e28;color:#9dd4c0;
+    border:1px solid #2a6b5e;border-radius:5px;
+    padding:3px 6px;font-size:11.5px;
+    font-family:'Inter',sans-serif;cursor:pointer;
+    max-width:160px;outline:none;
   }
   select:focus{border-color:#4db89a;}
   .btn-ref{
-    background:none;
-    border:none;
-    color:#6ab89e;
-    cursor:pointer;
-    font-size:14px;
-    line-height:1;
-    padding:2px;
-    flex-shrink:0;
+    background:none;border:none;color:#6ab89e;
+    cursor:pointer;font-size:15px;line-height:1;
+    padding:2px;flex-shrink:0;
   }
   .btn-ref:hover{color:#9dd4c0;}
 
   /* ── condition card ── */
   .cond-card{
-    background:#1a4a42;
-    border-radius:8px;
-    padding:10px 12px;
-    display:flex;
-    align-items:center;
-    gap:10px;
+    background:#1a4a42;border-radius:8px;
+    padding:10px 12px;display:flex;align-items:center;gap:10px;
   }
-  .cond-icon{
-    flex-shrink:0;
-    width:38px;
-    height:38px;
-    color:#f0b841;
-  }
+  .cond-icon{flex-shrink:0;width:40px;height:40px;color:#f0b841;}
   .cond-icon svg{width:100%;height:100%;}
   .cond-info{flex:1;min-width:0;}
-  .cond-date{font-size:10.5px;color:#6ab89e;margin-bottom:2px;}
-  .cond-text{font-size:13px;font-weight:600;color:#fff;line-height:1.2;margin-bottom:1px;}
-  .cond-bm{font-size:10.5px;color:#6ab89e;font-style:italic;margin-bottom:4px;
+  .cond-date{font-size:10px;color:#6ab89e;margin-bottom:2px;}
+  .cond-text{font-size:13.5px;font-weight:700;color:#fff;line-height:1.2;margin-bottom:1px;}
+  .cond-bm{font-size:10.5px;color:#6ab89e;font-style:italic;margin-bottom:3px;
     white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
   .cond-when{font-size:10.5px;color:#9dd4c0;}
 
-  /* ── data rows (like the sensor panel) ── */
-  .data-panel{
-    background:#1a4a42;
-    border-radius:8px;
-    overflow:hidden;
-  }
+  /* ── data rows ── */
+  .data-panel{background:#1a4a42;border-radius:8px;overflow:hidden;}
   .data-row{
-    display:flex;
-    align-items:center;
+    display:flex;align-items:center;
     justify-content:space-between;
     padding:7px 12px;
     border-bottom:1px solid #0f2e28;
@@ -115,87 +77,66 @@
   .data-row:last-child{border-bottom:none;}
   .data-label{font-size:11.5px;color:#9dd4c0;}
   .data-val{
-    font-size:14px;
-    font-weight:700;
-    color:#4db89a;
-    display:flex;
-    align-items:baseline;
-    gap:3px;
+    font-size:14px;font-weight:700;color:#4db89a;
+    display:flex;align-items:baseline;gap:3px;
   }
   .data-val .unit{font-size:10px;font-weight:500;color:#6ab89e;}
   .data-val.na{color:#3a7a6a;font-size:12px;font-weight:500;}
+  .live-dot{
+    width:6px;height:6px;border-radius:50%;
+    background:#4db89a;display:inline-block;
+    margin-left:4px;vertical-align:middle;
+    animation:pulse 2s infinite;
+  }
+  @keyframes pulse{0%,100%{opacity:1;}50%{opacity:0.3;}}
 
   /* ── 5-day strip ── */
-  .strip-label{
-    font-size:10px;
-    font-weight:600;
-    text-transform:uppercase;
-    letter-spacing:0.08em;
-    color:#4d8a78;
-    padding:0 2px;
+  .sec-label{
+    font-size:10px;font-weight:600;text-transform:uppercase;
+    letter-spacing:0.08em;color:#4d8a78;padding:0 2px;
   }
   .strip{
-    display:flex;
-    gap:5px;
-    overflow-x:auto;
-    scrollbar-width:thin;
-    scrollbar-color:#1a4a42 transparent;
+    display:flex;gap:5px;overflow-x:auto;
+    scrollbar-width:thin;scrollbar-color:#1a4a42 transparent;
   }
   .strip::-webkit-scrollbar{height:3px;}
   .strip::-webkit-scrollbar-thumb{background:#1a4a42;border-radius:2px;}
   .day{
-    flex:0 0 auto;
-    width:58px;
-    background:#1a4a42;
-    border-radius:7px;
-    padding:7px 4px;
-    text-align:center;
+    flex:0 0 auto;width:60px;
+    background:#1a4a42;border-radius:7px;
+    padding:7px 4px;text-align:center;
   }
-  .day .d-date{font-size:9.5px;color:#6ab89e;margin-bottom:4px;line-height:1.2;}
+  .day .d-date{font-size:9.5px;color:#6ab89e;margin-bottom:4px;line-height:1.3;}
   .day .d-icon{width:22px;height:22px;margin:0 auto 4px;color:#9dd4c0;}
   .day .d-icon svg{width:100%;height:100%;}
   .day .d-temp{font-size:11px;font-weight:600;}
   .day .d-temp .mx{color:#f0b841;}
   .day .d-temp .mn{color:#6ab89e;margin-left:2px;}
 
-  /* ── warning ── */
-  .warn-label{
-    font-size:10px;
-    font-weight:600;
-    text-transform:uppercase;
-    letter-spacing:0.08em;
-    color:#4d8a78;
-    padding:0 2px;
-  }
+  /* ── warnings ── */
   .warn-card{
     background:rgba(200,60,50,0.15);
     border:1px solid rgba(200,60,50,0.35);
-    border-radius:7px;
-    padding:8px 10px;
+    border-radius:7px;padding:8px 10px;margin-bottom:6px;
   }
-  .warn-title{font-size:11px;font-weight:600;color:#e05a4a;margin-bottom:3px;}
+  .warn-card:last-child{margin-bottom:0;}
+  .warn-title{font-size:11px;font-weight:700;color:#e05a4a;margin-bottom:3px;}
   .warn-text{font-size:10.5px;color:#e8f5f0;line-height:1.45;margin-bottom:4px;}
   .warn-period{font-size:9.5px;color:#6ab89e;}
   .calm{
     display:flex;align-items:center;gap:7px;
-    background:#1a4a42;border-radius:7px;padding:7px 10px;
-    font-size:11px;color:#6ab89e;
+    background:#1a4a42;border-radius:7px;
+    padding:7px 10px;font-size:11px;color:#6ab89e;
   }
   .calm-dot{width:7px;height:7px;border-radius:50%;background:#4db89a;flex-shrink:0;}
 
-  /* ── states ── */
-  .skeleton{color:#4d8a78;font-size:11.5px;padding:8px 0;text-align:center;}
+  .skeleton{color:#4d8a78;font-size:11.5px;padding:8px;text-align:center;}
   .updated{font-size:9.5px;color:#3a6a5a;text-align:right;padding:0 2px;}
-
-  /* scrollbar for the whole page */
-  ::-webkit-scrollbar{width:4px;}
-  ::-webkit-scrollbar-thumb{background:#1a4a42;border-radius:2px;}
 </style>
 </head>
 <body>
 <div class="wrap">
 
-  <!-- header -->
   <div class="hdr">
     <span class="hdr-title">☁ Ramalan Cuaca</span>
     <div class="hdr-right">
@@ -204,42 +145,55 @@
     </div>
   </div>
 
-  <!-- condition -->
   <div id="condSlot"><div class="skeleton">Loading…</div></div>
 
-  <!-- sensor data rows -->
   <div class="data-panel">
     <div class="data-row">
       <span class="data-label">Temperature</span>
       <span class="data-val" id="rowTemp"><span class="na">—</span></span>
     </div>
     <div class="data-row">
-      <span class="data-label">Wind</span>
-      <span class="data-val na" id="rowWind">— <span class="unit">m³/h</span></span>
+      <span class="data-label">Wind <span id="windDot"></span></span>
+      <span class="data-val" id="rowWind"><span class="na">—</span> <span class="unit">km/h</span></span>
     </div>
     <div class="data-row">
-      <span class="data-label">Pressure</span>
-      <span class="data-val na" id="rowPressure">— <span class="unit">bar</span></span>
+      <span class="data-label">Pressure <span id="pressDot"></span></span>
+      <span class="data-val" id="rowPressure"><span class="na">—</span> <span class="unit">hPa</span></span>
     </div>
   </div>
 
-  <!-- 5-day -->
-  <span class="strip-label">5-Day Outlook</span>
+  <span class="sec-label">5-Day Outlook</span>
   <div class="strip" id="stripSlot"></div>
 
-  <!-- warnings -->
-  <span class="warn-label" id="warnLabel" style="display:none">⚠ Active Warnings</span>
+  <span class="sec-label" id="warnLabel" style="display:none">⚠ Active Warnings</span>
   <div id="warnSlot"></div>
 
   <span class="updated" id="updatedAt"></span>
-
 </div>
-<script>
-const BASE='https://api.data.gov.my/weather';
-const PREFERRED='Selangor';
-const EXCLUDE=['sabah','sarawak','labuan'];
 
-const CDICT={
+<script>
+const BASE = 'https://api.data.gov.my/weather';
+const EXCLUDE = ['sabah','sarawak','labuan'];
+const PREFERRED = 'Selangor';
+
+// Coordinates for each Peninsular Malaysian state (for Open-Meteo wind/pressure)
+const STATE_COORDS = {
+  'Johor':             { lat: 1.4854,  lon: 103.7618 },
+  'Kedah':             { lat: 6.1184,  lon: 100.3685 },
+  'Kelantan':          { lat: 6.1254,  lon: 102.2381 },
+  'Melaka':            { lat: 2.1896,  lon: 102.2501 },
+  'Negeri Sembilan':   { lat: 2.7258,  lon: 101.9424 },
+  'Pahang':            { lat: 3.8126,  lon: 103.3256 },
+  'Perak':             { lat: 4.5921,  lon: 101.0901 },
+  'Perlis':            { lat: 6.4449,  lon: 100.2048 },
+  'Pulau Pinang':      { lat: 5.4141,  lon: 100.3288 },
+  'Selangor':          { lat: 3.0738,  lon: 101.5183 },
+  'Terengganu':        { lat: 5.3117,  lon: 103.1324 },
+  'WP Kuala Lumpur':   { lat: 3.1390,  lon: 101.6869 },
+  'WP Putrajaya':      { lat: 2.9264,  lon: 101.6964 },
+};
+
+const CDICT = {
   'berjerebu':'Hazy','tiada hujan':'No rain','hujan':'Rain',
   'hujan di beberapa tempat':'Scattered rain',
   'hujan di satu dua tempat':'Isolated rain',
@@ -253,25 +207,25 @@ const CDICT={
   'ribut petir di satu dua tempat':'Isolated thunderstorms',
   'ribut petir di satu dua tempat di kawasan pantai':'Isolated T-storms (coastal)',
   'ribut petir di satu dua tempat di kawasan pedalaman':'Isolated T-storms (inland)',
-  'ribut petir di kebanyakan tempat':'Thunderstorms in most areas',
+  'ribut petir di kebanyakan tempat':'T-storms in most areas',
   'ribut petir menyeluruh':'Widespread thunderstorms',
 };
-const WDICT={
+const WDICT = {
   'pagi':'Morning','malam':'Night','petang':'Afternoon',
   'pagi dan petang':'Morning & afternoon','pagi dan malam':'Morning & night',
   'petang dan malam':'Afternoon & night','sepanjang hari':'All day',
 };
+
 function tc(t){
   if(!t)return'No data';
   const k=t.trim().toLowerCase();
   if(CDICT[k])return CDICT[k];
   let s=k;
-  [
-    [/ribut petir/g,'T-storms'],[/tiada hujan/g,'no rain'],[/\bhujan\b/g,'rain'],
-    [/berjerebu/g,'hazy'],[/di kebanyakan tempat/g,'in most areas'],
-    [/di beberapa tempat/g,'scattered'],[/di satu dua tempat/g,'isolated'],
-    [/menyeluruh/g,'widespread'],[/kawasan pantai/g,'coastal'],
-    [/kawasan pedalaman/g,'inland'],[/\bdi\b/g,''],
+  [[/ribut petir/g,'T-storms'],[/tiada hujan/g,'no rain'],[/\bhujan\b/g,'rain'],
+   [/berjerebu/g,'hazy'],[/di kebanyakan tempat/g,'in most areas'],
+   [/di beberapa tempat/g,'scattered'],[/di satu dua tempat/g,'isolated'],
+   [/menyeluruh/g,'widespread'],[/kawasan pantai/g,'coastal'],
+   [/kawasan pedalaman/g,'inland'],[/\bdi\b/g,'']
   ].forEach(([r,v])=>s=s.replace(r,v));
   return s.trim().charAt(0).toUpperCase()+s.trim().slice(1);
 }
@@ -292,8 +246,8 @@ const ICO={
 };
 
 function dayLabel(d){
-  const dt=new Date(d+'T00:00:00+08:00');
-  return dt.toLocaleDateString('en-GB',{weekday:'short',day:'numeric',month:'short'});
+  return new Date(d+'T00:00:00+08:00')
+    .toLocaleDateString('en-GB',{weekday:'short',day:'numeric',month:'short'});
 }
 function fmtPeriod(ts){
   if(!ts)return'—';
@@ -337,6 +291,7 @@ function selectState(name){
   if(!days||!days.length)return;
   renderCond(days[0]);
   renderStrip(days.slice(1,6));
+  loadLiveWeather(name);
 }
 
 function renderCond(d){
@@ -352,8 +307,7 @@ function renderCond(d){
       </div>
     </div>`;
   document.getElementById('rowTemp').innerHTML=
-    `<span style="color:#f0b841">${d.max_temp}</span><span class="unit">°C max</span>&nbsp;
-     <span style="color:#9dd4c0;font-size:12px">${d.min_temp}°</span><span class="unit">min</span>`;
+    `<span style="color:#f0b841">${d.max_temp}</span><span class="unit">°C max</span>&nbsp;<span style="color:#9dd4c0;font-size:12px">${d.min_temp}°</span><span class="unit">min</span>`;
 }
 
 function renderStrip(days){
@@ -365,6 +319,33 @@ function renderStrip(days){
       <div class="d-temp"><span class="mx">${d.max_temp}°</span><span class="mn">${d.min_temp}°</span></div>
     </div>`;
   }).join('');
+}
+
+async function loadLiveWeather(stateName){
+  // Reset
+  document.getElementById('rowWind').innerHTML=`<span class="na">—</span> <span class="unit">km/h</span>`;
+  document.getElementById('rowPressure').innerHTML=`<span class="na">—</span> <span class="unit">hPa</span>`;
+  document.getElementById('windDot').innerHTML='';
+  document.getElementById('pressDot').innerHTML='';
+
+  const coords=STATE_COORDS[stateName];
+  if(!coords)return;
+
+  try{
+    const url=`https://api.open-meteo.com/v1/forecast?latitude=${coords.lat}&longitude=${coords.lon}&current=wind_speed_10m,surface_pressure&wind_speed_unit=kmh&timezone=Asia%2FKuala_Lumpur`;
+    const data=await fetchJ(url);
+    const c=data.current;
+    if(c){
+      document.getElementById('rowWind').innerHTML=
+        `<span style="color:#4db89a">${Math.round(c.wind_speed_10m)}</span><span class="unit">km/h</span>`;
+      document.getElementById('rowPressure').innerHTML=
+        `<span style="color:#4db89a">${Math.round(c.surface_pressure)}</span><span class="unit">hPa</span>`;
+      document.getElementById('windDot').innerHTML='<span class="live-dot"></span>';
+      document.getElementById('pressDot').innerHTML='<span class="live-dot"></span>';
+    }
+  }catch(e){
+    // silently fail — keep showing —
+  }
 }
 
 async function loadWarnings(){
@@ -391,7 +372,8 @@ async function loadWarnings(){
 
 function stamp(){
   document.getElementById('updatedAt').textContent=
-    'MET Malaysia · Updated '+new Date().toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'});
+    'MET Malaysia + Open-Meteo · Updated '+
+    new Date().toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'});
 }
 
 async function loadAll(){
@@ -401,21 +383,6 @@ async function loadAll(){
 }
 
 document.getElementById('refreshBtn').onclick=loadAll;
-
-// ── WIND & PRESSURE ──────────────────────────────────────────────
-// These fields are left blank (—) for now.
-// To connect your own sensor/IoT source, update the two functions below:
-//
-// function updateWind(value, unit = 'm³/h') {
-//   document.getElementById('rowWind').innerHTML =
-//     `${value} <span class="unit">${unit}</span>`;
-// }
-// function updatePressure(value, unit = 'bar') {
-//   document.getElementById('rowPressure').innerHTML =
-//     `${value} <span class="unit">${unit}</span>`;
-// }
-// ────────────────────────────────────────────────────────────────
-
 loadAll();
 </script>
 </body>
